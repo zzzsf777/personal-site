@@ -639,13 +639,20 @@ body.light .nav-links{background:rgba(244,247,252,.97)}
 /* 滚动进度条 + 导航高亮 */
 (function(){
   const prog = document.getElementById('prog');
-  const links = [...document.querySelectorAll('.nav-links a')];
-  const secs = links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const links = [...document.querySelectorAll('.nav-links a')].filter(a => {
+    const href = a.getAttribute('href') || '';
+    return href.charAt(0) === '#' && href.length > 1;      // 只处理页内锚点，忽略 /blog/ 这类路径
+  });
+  const secs = links.map(a => {
+    try { return document.querySelector(a.getAttribute('href')); } catch (e) { return null; }
+  }).filter(Boolean);
   function onScroll(){
     const st = scrollY, dh = document.documentElement.scrollHeight - innerHeight;
-    prog.style.width = (dh>0 ? (st/dh)*100 : 0) + '%';
+    if(prog) prog.style.width = (dh>0 ? (st/dh)*100 : 0) + '%';
+    if(!secs.length) return;
     let cur = secs[0];
     secs.forEach(s=>{ if(s.offsetTop - 140 <= st) cur = s; });
+    if(!cur) return;
     links.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+cur.id));
   }
   addEventListener('scroll', onScroll, {passive:true});

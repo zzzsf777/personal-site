@@ -188,8 +188,10 @@ footer .mono{font-family:ui-monospace,monospace;color:var(--c1)}
 /* ==================== 批1 新增样式 ==================== */
 /* 首屏加载动画 */
 .loader{position:fixed;inset:0;z-index:999;background:var(--bg);display:grid;place-items:center;
-  transition:opacity .65s ease,visibility .65s}
-.loader.hide{opacity:0;visibility:hidden}
+  transition:opacity .6s ease,visibility .6s;
+  animation:loaderAutoOut .6s ease 1.4s forwards}
+@keyframes loaderAutoOut{to{opacity:0;visibility:hidden;pointer-events:none}}
+.loader.hide{opacity:0;visibility:hidden;pointer-events:none}
 .loader-inner{text-align:center}
 .loader-mark{width:74px;height:74px;margin:0 auto 20px;border-radius:20px;display:grid;place-items:center;
   font-size:36px;font-weight:900;color:#04070d;letter-spacing:-1px;
@@ -678,13 +680,27 @@ document.querySelectorAll('.card').forEach(c=>{
 
 document.getElementById('yr').textContent = new Date().getFullYear();
 
+</script>
+<script>
 /* ==================== 批1 新增交互 ==================== */
-/* 首屏加载动画 */
-window.addEventListener('load', function(){
-  const ld = document.getElementById('loader');
-  if(ld){ setTimeout(()=>ld.classList.add('hide'), 420); }
-  setTimeout(()=>{ if(ld && !ld.classList.contains('hide')) ld.classList.add('hide'); }, 2600);
-});
+/* 首屏加载动画（CSS 已有自动兜底，这里让它更早消失） */
+(function(){
+  function hideLoader(){
+    var ld = document.getElementById('loader');
+    if(ld) ld.classList.add('hide');
+  }
+  try{
+    if(document.readyState === 'complete'){
+      setTimeout(hideLoader, 260);
+    }else{
+      window.addEventListener('load', function(){ setTimeout(hideLoader, 260); });
+    }
+  }catch(e){}
+  setTimeout(hideLoader, 1100);                                    // 兜底 1
+  document.addEventListener('DOMContentLoaded', function(){        // 兜底 2
+    setTimeout(hideLoader, 800);
+  });
+})();
 
 /* 回到顶部 */
 (function(){

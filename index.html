@@ -176,6 +176,63 @@ footer .mono{font-family:ui-monospace,monospace;color:var(--c1)}
   section{padding:82px 0}
   .cursor-glow{display:none}
 }
+
+/* ==================== 批1 新增样式 ==================== */
+/* 首屏加载动画 */
+.loader{position:fixed;inset:0;z-index:999;background:var(--bg);display:grid;place-items:center;
+  transition:opacity .65s ease,visibility .65s}
+.loader.hide{opacity:0;visibility:hidden}
+.loader-inner{text-align:center}
+.loader-mark{width:74px;height:74px;margin:0 auto 20px;border-radius:20px;display:grid;place-items:center;
+  font-size:36px;font-weight:900;color:#04070d;letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 0 44px rgba(0,212,255,.45);
+  animation:loaderPulse 1.4s ease-in-out infinite}
+@keyframes loaderPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.93);opacity:.75}}
+.loader-bar{width:170px;height:3px;background:rgba(120,180,255,.16);border-radius:3px;overflow:hidden;margin:0 auto}
+.loader-bar span{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3));animation:loaderFill 1.1s ease-out forwards}
+@keyframes loaderFill{to{width:100%}}
+.loader-tip{margin-top:14px;font-size:11.5px;letter-spacing:3.5px;color:var(--txt-dim);
+  font-family:ui-monospace,monospace}
+
+/* 回到顶部 */
+.to-top{position:fixed;right:26px;bottom:26px;width:48px;height:48px;border-radius:14px;border:none;
+  background:linear-gradient(135deg,var(--c1),var(--c2));color:#04070d;font-size:21px;font-weight:800;
+  cursor:pointer;opacity:0;pointer-events:none;transform:translateY(16px);transition:.32s;
+  z-index:45;box-shadow:var(--glow)}
+.to-top.show{opacity:1;pointer-events:auto;transform:none}
+.to-top:hover{transform:translateY(-3px)}
+
+/* 主题切换 */
+.theme-toggle{background:none;border:1px solid var(--card-brd);border-radius:9px;padding:7px 11px;
+  font-size:16px;cursor:pointer;color:var(--txt);transition:.25s;margin-left:auto;margin-right:8px}
+.theme-toggle:hover{border-color:var(--c1)}
+
+/* 分享按钮组 */
+.share-row{margin-top:34px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.share-label{font-size:13.5px;color:var(--txt-dim);margin-right:4px}
+.share-btn{background:var(--card);border:1px solid var(--card-brd);color:var(--txt);
+  padding:9px 16px;border-radius:11px;font-size:13.5px;cursor:pointer;transition:.25s;font-family:inherit}
+.share-btn:hover{border-color:var(--c1);color:var(--c1);transform:translateY(-2px)}
+
+/* 浅色主题 */
+body.light{
+  --bg:#f4f7fc; --bg-soft:#e9eff8; --card:rgba(10,40,80,.035); --card-brd:rgba(20,90,180,.16);
+  --txt:#0b1523; --txt-dim:#5b6b83;
+  --c1:#0a7fd4; --c2:#5b3fd6; --c3:#00a878;
+  --glow:0 0 22px rgba(10,127,212,.22);
+}
+body.light .grid-overlay{opacity:.55}
+body.light .cursor-glow{background:radial-gradient(circle,rgba(10,127,212,.09),transparent 62%)}
+body.light header{background:rgba(244,247,252,.82)}
+body.light .loader-mark{color:#fff}
+body.light .to-top,body.light .btn-primary{color:#fff}
+body.light .logo .mark{color:#fff}
+body.light .nav-links{background:rgba(244,247,252,.97)}
+@media(max-width:860px){
+  .to-top{right:16px;bottom:16px;width:44px;height:44px}
+  .theme-toggle{margin-right:6px}
+}
 </style>
 </head>
 <body>
@@ -191,6 +248,7 @@ footer .mono{font-family:ui-monospace,monospace;color:var(--c1)}
 <header>
   <nav>
     <div class="logo"><span class="mark">峰</span><span>小峰</span></div>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换深浅主题" title="切换深浅主题">🌙</button>
     <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -343,21 +401,43 @@ footer .mono{font-family:ui-monospace,monospace;color:var(--c1)}
       <p>对检测行业自动化、AI 工具落地、或者干净的软件感兴趣，都欢迎来找我。</p>
     </div>
     <div class="contact-grid">
-      <a class="card contact-item reveal" href="#">
+      <a class="card contact-item reveal" href="mailto:770224527@qq.com">
         <div class="ci">✉️</div>
-        <div><div class="cl">Email</div><div class="cv">your@email.com</div></div>
+        <div><div class="cl">Email</div><div class="cv">770224527@qq.com</div></div>
       </a>
-      <a class="card contact-item reveal" href="#">
-        <div class="ci">💬</div>
-        <div><div class="cl">微信</div><div class="cv">your_wechat_id</div></div>
+      <a class="card contact-item reveal" href="https://wpa.qq.com/msgrd?v=3&uin=770224527&site=qq&menu=yes" target="_blank" rel="noopener">
+        <div class="ci">🐧</div>
+        <div><div class="cl">QQ</div><div class="cv">770224527</div></div>
       </a>
-      <a class="card contact-item reveal" href="#">
+      <a class="card contact-item reveal" href="https://github.com/zzzsf777" target="_blank" rel="noopener">
         <div class="ci">🐙</div>
-        <div><div class="cl">GitHub</div><div class="cv">github.com/yourname</div></div>
+        <div><div class="cl">GitHub</div><div class="cv">github.com/zzzsf777</div></div>
       </a>
+    </div>
+
+    <!-- 分享按钮组 -->
+    <div class="share-row reveal">
+      <span class="share-label">分享这个页面</span>
+      <button class="share-btn" data-share="copy">🔗 复制链接</button>
+      <button class="share-btn" data-share="weibo">微博</button>
+      <button class="share-btn" data-share="qq">QQ</button>
+      <button class="share-btn" data-share="x">X</button>
+      <button class="share-btn" data-share="native">更多…</button>
     </div>
   </div>
 </section>
+
+<!-- 回到顶部 -->
+<button class="to-top" id="toTop" aria-label="回到顶部" title="回到顶部">↑</button>
+
+<!-- 首屏加载动画 -->
+<div class="loader" id="loader">
+  <div class="loader-inner">
+    <div class="loader-mark">F</div>
+    <div class="loader-bar"><span></span></div>
+    <div class="loader-tip">LOADING</div>
+  </div>
+</div>
 
 <footer>
   <div class="wrap">
@@ -525,6 +605,71 @@ document.querySelectorAll('.card').forEach(c=>{
 })();
 
 document.getElementById('yr').textContent = new Date().getFullYear();
+
+/* ==================== 批1 新增交互 ==================== */
+/* 首屏加载动画 */
+window.addEventListener('load', function(){
+  const ld = document.getElementById('loader');
+  if(ld){ setTimeout(()=>ld.classList.add('hide'), 420); }
+  setTimeout(()=>{ if(ld && !ld.classList.contains('hide')) ld.classList.add('hide'); }, 2600);
+});
+
+/* 回到顶部 */
+(function(){
+  const btn = document.getElementById('toTop');
+  if(!btn) return;
+  addEventListener('scroll', ()=>{ btn.classList.toggle('show', scrollY > 520); }, {passive:true});
+  btn.addEventListener('click', ()=>scrollTo({top:0, behavior:'smooth'}));
+})();
+
+/* 深浅色切换（记住选择） */
+(function(){
+  const btn = document.getElementById('themeToggle');
+  const saved = localStorage.getItem('site-theme');
+  if(saved === 'light'){ document.body.classList.add('light'); }
+  if(btn){
+    btn.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+    btn.addEventListener('click', ()=>{
+      const light = document.body.classList.toggle('light');
+      btn.textContent = light ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', light ? 'light' : 'dark');
+    });
+  }
+})();
+
+/* 分享按钮 */
+(function(){
+  const url = location.origin + location.pathname;
+  const title = document.title;
+  document.querySelectorAll('[data-share]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const kind = btn.dataset.share;
+      if(kind === 'copy'){
+        try{
+          await navigator.clipboard.writeText(url);
+          const t = btn.textContent; btn.textContent = '✓ 已复制';
+          setTimeout(()=>btn.textContent = t, 1600);
+        }catch(e){ prompt('复制这个链接：', url); }
+      }else if(kind === 'weibo'){
+        open('https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) +
+             '&title=' + encodeURIComponent(title), '_blank');
+      }else if(kind === 'qq'){
+        open('https://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(url) +
+             '&title=' + encodeURIComponent(title), '_blank');
+      }else if(kind === 'x'){
+        open('https://twitter.com/intent/tweet?url=' + encodeURIComponent(url) +
+             '&text=' + encodeURIComponent(title), '_blank');
+      }else if(kind === 'native'){
+        if(navigator.share){
+          navigator.share({title:title, url:url}).catch(()=>{});
+        }else{
+          try{ await navigator.clipboard.writeText(url); alert('链接已复制，粘贴给朋友吧'); }
+          catch(e){ prompt('复制这个链接：', url); }
+        }
+      }
+    });
+  });
+})();
 </script>
 </body>
 </html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自动化不是万能的：我踩过的 5 个坑 · 小峰</title>
+<meta name="description" content="写过监控脚本、批量文档工具、抢购提醒……每一个翻车都教会我一件事。这五条是我用真金白银（和时间）换来的。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2300d4ff'/><stop offset='1' stop-color='%237b5cff'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='73' font-size='64' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%230a0e1a'>F</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><span class="mark">F</span><span>小峰 · 笔记</span></a>
+  <nav>
+    <a href="/">主页</a>
+    <a href="/blog/">全部笔记</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+  </nav>
+</div></header>
+<main><div class="wrap">
+  <div class="meta"><span>2026-09-16</span><span class="tag">自动化</span><span class="tag">踩坑</span><span class="tag">经验</span></div>
+  <h1>自动化不是万能的：我踩过的 5 个坑</h1>
+  <div class="stats">
+    <span>👁 阅读 <b data-count-key="read-automation-pitfalls">—</b></span>
+    <span>↗ 分享 <b data-count-key="share-automation-pitfalls">—</b></span>
+  </div>
+
+<p>自动化很爽，但它也会用各种方式教你做人。下面是我真实踩过的坑，希望你能少走一点。</p>
+<h2>坑 1：以为能全自动</h2>
+<p>几乎所有「全自动」的设想，在现实里都会撞上验证码、风控或者平台协议。更糟的是，硬要绕过去可能让你的账号受影响。<strong>正确姿势是：机器做它擅长的（盯、算、提醒），把需要判断和责任的一步留给人。</strong></p>
+<h2>坑 2：只测 happy path</h2>
+<p>我的第一个监控脚本，跑通就上线了，然后：页面改版了、网络抖了一下、浏览器崩了……全都让它悄悄死掉，而我以为它还在工作。<strong>教训：任何长期运行的东西都要有「自愈」和「我能知道它活着」的机制。</strong></p>
+<h2>坑 3：数据放在你以为安全的地方</h2>
+<p>纯前端应用用浏览器本地存储存数据——听起来很方便，直到你换一台设备：数据全没了。或者清一次浏览器缓存：也是全没。<strong>涉及数据，先想清楚它住在哪、会不会丢、能不能同步。</strong></p>
+<h2>坑 4：不验证就相信</h2>
+<p>「它说成功了」不等于「它成功了」。接口返回 200 但文件其实没写、命令退出码是 0 但结果是空的——这类事我遇到过不止一次。<strong>凡是重要的动作，都要有一个独立的验证步骤：读回来看看。</strong></p>
+<h2>坑 5：过度工程</h2>
+<p>为了「以后可能扩展」，我写过一个配置项堆到 30 个的脚本。结果是：我自己三个月后都不记得怎么配了，而且真正用到的只有 5 个参数。<strong>先做能用的，再在真的需要时扩展。</strong></p>
+<h2>一句话总结</h2>
+<p>自动化的目标是<strong>让你少干活、少出错、心里有底</strong>——不是炫技。所以：小步走、加自检、留退路、人机配合。<strong>能稳定跑三个月的小脚本，胜过花两周写的完美系统。</strong></p>
+
+  <div class="share-row">
+    <span>分享这篇 →</span>
+    <button class="btn" data-share="copy">🔗 复制链接</button>
+    <button class="btn ghost" data-share="weibo">微博</button>
+    <button class="btn ghost" data-share="qq">QQ</button>
+    <a class="btn ghost" href="/blog/">← 全部笔记</a>
+  </div>
+</div></main>
+<footer><div class="wrap">© <span id="yr"></span> 小峰 · <a href="/">zzzsf777.pages.dev</a></div></footer>
+<script>(function(){
+  var s = localStorage.getItem('site-theme');
+  if(s === 'light') document.body.classList.add('light');
+  var b = document.getElementById('themeToggle');
+  if(b){
+    b.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+    b.addEventListener('click', function(){
+      var l = document.body.classList.toggle('light');
+      b.textContent = l ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', l ? 'light' : 'dark');
+    });
+  }
+})();
+document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script>(function(){
+  var NS = 'zzzsf777';
+  function bump(key, cb){
+    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  function read(key, cb){
+    fetch('https://abacus.jasoncameron.dev/get/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  window.__counter = {bump:bump, read:read};
+  // 自动填充 [data-count-key] 元素的只读数字
+  document.querySelectorAll('[data-count-key]').forEach(function(el){
+    read(el.dataset.countKey, function(v){ el.textContent = (v === null ? '—' : v); });
+  });
+})();</script>
+<script>
+(function(){
+  var slug = 'automation-pitfalls';
+  var url = location.href;
+  document.querySelectorAll('[data-share]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.dataset.share;
+      if(window.__counter) window.__counter.bump('share-' + slug);
+      if(k === 'copy'){
+        navigator.clipboard.writeText(url).then(function(){
+          var t = b.textContent; b.textContent = '✓ 已复制';
+          setTimeout(function(){ b.textContent = t; }, 1600);
+        }).catch(function(){ prompt('复制链接：', url); });
+      } else if(k === 'weibo'){
+        open('https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      } else if(k === 'qq'){
+        open('https://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      }
+    });
+  });
+  // 记录一次阅读
+  if(window.__counter) window.__counter.bump('read-' + slug);
+})();
+</script>
+</body>
+</html>

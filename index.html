@@ -223,6 +223,19 @@ footer .mono{font-family:ui-monospace,monospace;color:var(--c1)}
   padding:9px 16px;border-radius:11px;font-size:13.5px;cursor:pointer;transition:.25s;font-family:inherit}
 .share-btn:hover{border-color:var(--c1);color:var(--c1);transform:translateY(-2px)}
 
+
+/* ==================== 笔记区（批3） ==================== */
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card.note{display:block;text-decoration:none;color:inherit}
+.note-date{font-size:12.5px;color:var(--txt-dim);font-family:ui-monospace,monospace;margin-bottom:9px}
+.card.note h3{font-size:18px;margin-bottom:10px;line-height:1.45}
+.card.note:hover h3{color:var(--c1)}
+.card.note p{color:var(--txt-dim);font-size:14.5px;margin:0}
+.note-foot{margin-top:16px;padding-top:13px;border-top:1px solid rgba(120,180,255,.11);
+  font-size:12.5px;color:var(--txt-dim);font-family:ui-monospace,monospace}
+.note-foot b{color:var(--c1);font-weight:700}
+.notes-more{margin-top:28px}
+
 /* 浅色主题 */
 body.light{
   --bg:#f4f7fc; --bg-soft:#e9eff8; --card:rgba(10,40,80,.035); --card-brd:rgba(20,90,180,.16);
@@ -278,6 +291,7 @@ body.light .nav-links{background:rgba(244,247,252,.97)}
       <a href="#about">关于</a>
       <a href="#skills">能力</a>
       <a href="#projects">项目</a>
+      <a href="/blog/">笔记</a>
       <a href="#contact">联系</a>
     </div>
   </nav>
@@ -408,6 +422,42 @@ body.light .nav-links{background:rgba(244,247,252,.97)}
         <p>多目标页面监控工具：状态变化即刻响铃 + 置顶弹窗 + 自动打开购买页；带防误报时间窗与浏览器崩溃自愈机制。</p>
         <div class="stack">Python · Playwright · 常驻守护</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     笔记（博客预览）
+     ============================================================ -->
+<section id="notes">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Notes</div>
+      <h2>最近的笔记</h2>
+      <p>关于 AI 工具、自动化与工程实践的一些个人记录。</p>
+    </div>
+    <div class="notes-grid">
+        <a class="card note reveal" href="/blog/local-llm-worth-it.html">
+          <div class="note-date">2026-09-14</div>
+          <h3>本地大模型值不值得折腾？一份实测账</h3>
+          <p>把模型跑在自己机器上，隐私可控、不怕断网。但它真的够用吗？算一下内存、速度和实际体验账。</p>
+          <div class="note-foot">👁 <b data-count-key="read-local-llm-worth-it">—</b> · ↗ <b data-count-key="share-local-llm-worth-it">—</b></div>
+        </a>
+        <a class="card note reveal" href="/blog/my-tool-selection-method.html">
+          <div class="note-date">2026-09-15</div>
+          <h3>别迷信宣传参数：我的工具选型方法论</h3>
+          <p>杀软排名、网盘速度、截图占用……网上说法差异极大。我现在的做法是：自己跑一组 A/B。</p>
+          <div class="note-foot">👁 <b data-count-key="read-my-tool-selection-method">—</b> · ↗ <b data-count-key="share-my-tool-selection-method">—</b></div>
+        </a>
+        <a class="card note reveal" href="/blog/automation-pitfalls.html">
+          <div class="note-date">2026-09-16</div>
+          <h3>自动化不是万能的：我踩过的 5 个坑</h3>
+          <p>写过监控脚本、批量文档工具、抢购提醒……每一个翻车都教会我一件事。</p>
+          <div class="note-foot">👁 <b data-count-key="read-automation-pitfalls">—</b> · ↗ <b data-count-key="share-automation-pitfalls">—</b></div>
+        </a>
+    </div>
+    <div class="notes-more reveal">
+      <a class="btn btn-ghost" href="/blog/">查看全部笔记 →</a>
     </div>
   </div>
 </section>
@@ -691,6 +741,20 @@ window.addEventListener('load', function(){
       }
     });
   });
+})();
+
+/* 访问/分享计数（abacus.jasoncameron.dev，国内直连可用） */
+(function(){
+  var NS = 'zzzsf777';
+  function paint(){
+    document.querySelectorAll('[data-count-key]').forEach(function(el){
+      fetch('https://abacus.jasoncameron.dev/get/' + NS + '/' + el.dataset.countKey)
+        .then(function(r){ return r.json(); })
+        .then(function(d){ el.textContent = d.value; })
+        .catch(function(){ el.textContent = '—'; });
+    });
+  }
+  paint();
 })();
 </script>
 </body>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>别迷信宣传参数：我的工具选型方法论 · 小峰</title>
+<meta name="description" content="杀软排名、网盘速度、截图软件占用……网上说法差异极大。我现在的做法是：自己跑一组 A/B，让数据说话。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2300d4ff'/><stop offset='1' stop-color='%237b5cff'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='73' font-size='64' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%230a0e1a'>F</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><span class="mark">F</span><span>小峰 · 笔记</span></a>
+  <nav>
+    <a href="/">主页</a>
+    <a href="/blog/">全部笔记</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+  </nav>
+</div></header>
+<main><div class="wrap">
+  <div class="meta"><span>2026-09-15</span><span class="tag">工具</span><span class="tag">实测</span><span class="tag">方法论</span></div>
+  <h1>别迷信宣传参数：我的工具选型方法论</h1>
+  <div class="stats">
+    <span>👁 阅读 <b data-count-key="read-my-tool-selection-method">—</b></span>
+    <span>↗ 分享 <b data-count-key="share-my-tool-selection-method">—</b></span>
+  </div>
+
+<p>信息越多，判断越难。同一款软件，有人夸上天有人骂成狗；同一份榜单，不同机构结论相反。折腾久了，我总结出一套自己的选型方法。</p>
+<h2>原则一：先明确「我要什么」，再看「它有什么」</h2>
+<p>很多选择困难的根源不是信息不足，而是<strong>需求没定义清楚</strong>。比如选杀毒软件，如果你要的是「不打扰、不弹窗、不吃性能」，那排行榜第一的产品可能恰恰是体验最差的。</p>
+<h2>原则二：跑实测，不背参数</h2>
+<p>参数是厂家的语言，实测是你的语言。我的习惯是在自己的环境里测三件事：</p>
+<ul>
+<li><strong>速度</strong>：同一份文件、同一个网络，跑几轮取平均</li>
+<li><strong>资源占用</strong>：空闲和负载时的 CPU / 内存</li>
+<li><strong>干净程度</strong>：有没有自启项、后台服务、捆绑更新器</li>
+</ul>
+<p>举个真实例子：某个云盘协议，宣传和文档看着都很美，实测下来多线程下载速度反而比单线程还慢——说明瓶颈根本不在连接数。<strong>这类结论只能测出来，猜不出来。</strong></p>
+<h2>原则三：警惕「免费的最贵」</h2>
+<p>国内一堆「免费工具」的商业模式是：用你的机器资源换它的广告或挖矿，或者捆绑安装一整个全家桶。判断方法很简单——<strong>看它有没有后台常驻进程、有没有自启、有没有你从没点过的更新器</strong>。</p>
+<h2>原则四：可逆优先</h2>
+<p>能禁用就不卸载，能隔离就不删除。系统清理这件事，<strong>可逆永远优于激进</strong>，因为你永远不知道哪个被清掉的东西明天要用。</p>
+<h2>原则五：接受不完美</h2>
+<p>没有全能工具。我的现实做法是<strong>按场景分工</strong>：压缩用一个、截图用一个、卸载用一个、云盘用一个。看起来零碎，但每个都在自己那件事上最顺手。</p>
+<p>最后一句：<strong>实测数据 > 榜单推荐 > 厂商宣传</strong>。这条顺序几乎没让我失望过。</p>
+
+  <div class="share-row">
+    <span>分享这篇 →</span>
+    <button class="btn" data-share="copy">🔗 复制链接</button>
+    <button class="btn ghost" data-share="weibo">微博</button>
+    <button class="btn ghost" data-share="qq">QQ</button>
+    <a class="btn ghost" href="/blog/">← 全部笔记</a>
+  </div>
+</div></main>
+<footer><div class="wrap">© <span id="yr"></span> 小峰 · <a href="/">zzzsf777.pages.dev</a></div></footer>
+<script>(function(){
+  var s = localStorage.getItem('site-theme');
+  if(s === 'light') document.body.classList.add('light');
+  var b = document.getElementById('themeToggle');
+  if(b){
+    b.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+    b.addEventListener('click', function(){
+      var l = document.body.classList.toggle('light');
+      b.textContent = l ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', l ? 'light' : 'dark');
+    });
+  }
+})();
+document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script>(function(){
+  var NS = 'zzzsf777';
+  function bump(key, cb){
+    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  function read(key, cb){
+    fetch('https://abacus.jasoncameron.dev/get/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  window.__counter = {bump:bump, read:read};
+  // 自动填充 [data-count-key] 元素的只读数字
+  document.querySelectorAll('[data-count-key]').forEach(function(el){
+    read(el.dataset.countKey, function(v){ el.textContent = (v === null ? '—' : v); });
+  });
+})();</script>
+<script>
+(function(){
+  var slug = 'my-tool-selection-method';
+  var url = location.href;
+  document.querySelectorAll('[data-share]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.dataset.share;
+      if(window.__counter) window.__counter.bump('share-' + slug);
+      if(k === 'copy'){
+        navigator.clipboard.writeText(url).then(function(){
+          var t = b.textContent; b.textContent = '✓ 已复制';
+          setTimeout(function(){ b.textContent = t; }, 1600);
+        }).catch(function(){ prompt('复制链接：', url); });
+      } else if(k === 'weibo'){
+        open('https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      } else if(k === 'qq'){
+        open('https://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      }
+    });
+  });
+  // 记录一次阅读
+  if(window.__counter) window.__counter.bump('read-' + slug);
+})();
+</script>
+</body>
+</html>

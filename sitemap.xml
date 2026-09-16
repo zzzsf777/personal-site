@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://zzzsf777.pages.dev/</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
+  <url><loc>https://zzzsf777.pages.dev/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://zzzsf777.pages.dev/blog/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://zzzsf777.pages.dev/blog/ai-in-daily-work.html</loc><lastmod>2026-09-12</lastmod><priority>0.6</priority></url>
+  <url><loc>https://zzzsf777.pages.dev/blog/local-llm-worth-it.html</loc><lastmod>2026-09-14</lastmod><priority>0.6</priority></url>
+  <url><loc>https://zzzsf777.pages.dev/blog/my-tool-selection-method.html</loc><lastmod>2026-09-15</lastmod><priority>0.6</priority></url>
+  <url><loc>https://zzzsf777.pages.dev/blog/automation-pitfalls.html</loc><lastmod>2026-09-16</lastmod><priority>0.6</priority></url>
 </urlset>

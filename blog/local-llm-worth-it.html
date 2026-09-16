@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本地大模型值不值得折腾？一份实测账 · 小峰</title>
+<meta name="description" content="把模型跑在自己机器上，隐私可控、不怕断网、还能随便折腾。但它真的够用吗？算一下内存、速度和实际体验账。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2300d4ff'/><stop offset='1' stop-color='%237b5cff'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='73' font-size='64' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%230a0e1a'>F</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><span class="mark">F</span><span>小峰 · 笔记</span></a>
+  <nav>
+    <a href="/">主页</a>
+    <a href="/blog/">全部笔记</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+  </nav>
+</div></header>
+<main><div class="wrap">
+  <div class="meta"><span>2026-09-14</span><span class="tag">本地部署</span><span class="tag">实测</span><span class="tag">硬件</span></div>
+  <h1>本地大模型值不值得折腾？一份实测账</h1>
+  <div class="stats">
+    <span>👁 阅读 <b data-count-key="read-local-llm-worth-it">—</b></span>
+    <span>↗ 分享 <b data-count-key="share-local-llm-worth-it">—</b></span>
+  </div>
+
+<p>想本地跑模型的人通常有三个动机：<strong>隐私</strong>（数据不出门）、<strong>稳定</strong>（不依赖网络和额度）、<strong>好奇</strong>（就想自己试试）。我三个都有。</p>
+<h2>第一笔账：内存决定你能跑多大</h2>
+<p>统一内存架构的机器（比如 Apple Silicon）有个好处：CPU 和 GPU 共享内存池，没有独立显存的天花板。但也不是全都能给模型用，系统本身要吃掉一部分，实际可用的大概是总内存的六到七成。</p>
+<ul>
+<li><strong>16GB</strong>：适合 7-8B 级别（量化后 4-5GB），日常问答、摘要够用</li>
+<li><strong>24GB</strong>：14B 级别比较舒服，再大就紧张</li>
+<li><strong>32GB</strong>：能碰 30B 左右的 MoE 模型，这是质变的分界线</li>
+<li><strong>48GB+</strong>：dense 32B 才真正跑得舒坦</li>
+</ul>
+<h2>第二笔账：速度看带宽，不看代数</h2>
+<p>这点反直觉但很重要：<strong>生成的 token 速度基本正比于内存带宽</strong>。基础款的 M 系列芯片带宽只有 Pro 的一半左右，跑同一个模型速度差距是肉眼可见的。</p>
+<p>还有一个容易忽略的点：<strong>MoE 模型（专家混合）在同样大小下快得多</strong>，因为每个 token 只激活一小部分参数。35B 的 MoE 可能只激活 3B，跑起来像小模型，质量却是大模型的水平——这是目前本地部署性价比最高的路线。</p>
+<h2>第三笔账：上下文也是内存</h2>
+<p>很多人算内存时只算模型大小，忘了 KV 缓存。上下文开得越长，额外占的内存越多。所以「模型能装下」不等于「能长时间开着长上下文跑」。</p>
+<h2>结论</h2>
+<ul>
+<li><strong>日常文本处理</strong>（摘要、翻译、格式整理、看图识字）：本地模型完全够，而且更快更省心</li>
+<li><strong>复杂推理、长链条任务</strong>：云端旗舰模型仍然明显更强</li>
+<li><strong>真正的价值不在省钱</strong>（电费+硬件摊下来不便宜），而在<strong>数据自主和随时可用</strong></li>
+</ul>
+<p>所以我的建议是：<strong>把它当补充，不当替代</strong>。敏感数据本地处理，硬骨头交给云端。</p>
+
+  <div class="share-row">
+    <span>分享这篇 →</span>
+    <button class="btn" data-share="copy">🔗 复制链接</button>
+    <button class="btn ghost" data-share="weibo">微博</button>
+    <button class="btn ghost" data-share="qq">QQ</button>
+    <a class="btn ghost" href="/blog/">← 全部笔记</a>
+  </div>
+</div></main>
+<footer><div class="wrap">© <span id="yr"></span> 小峰 · <a href="/">zzzsf777.pages.dev</a></div></footer>
+<script>(function(){
+  var s = localStorage.getItem('site-theme');
+  if(s === 'light') document.body.classList.add('light');
+  var b = document.getElementById('themeToggle');
+  if(b){
+    b.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+    b.addEventListener('click', function(){
+      var l = document.body.classList.toggle('light');
+      b.textContent = l ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', l ? 'light' : 'dark');
+    });
+  }
+})();
+document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script>(function(){
+  var NS = 'zzzsf777';
+  function bump(key, cb){
+    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  function read(key, cb){
+    fetch('https://abacus.jasoncameron.dev/get/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  window.__counter = {bump:bump, read:read};
+  // 自动填充 [data-count-key] 元素的只读数字
+  document.querySelectorAll('[data-count-key]').forEach(function(el){
+    read(el.dataset.countKey, function(v){ el.textContent = (v === null ? '—' : v); });
+  });
+})();</script>
+<script>
+(function(){
+  var slug = 'local-llm-worth-it';
+  var url = location.href;
+  document.querySelectorAll('[data-share]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.dataset.share;
+      if(window.__counter) window.__counter.bump('share-' + slug);
+      if(k === 'copy'){
+        navigator.clipboard.writeText(url).then(function(){
+          var t = b.textContent; b.textContent = '✓ 已复制';
+          setTimeout(function(){ b.textContent = t; }, 1600);
+        }).catch(function(){ prompt('复制链接：', url); });
+      } else if(k === 'weibo'){
+        open('https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      } else if(k === 'qq'){
+        open('https://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      }
+    });
+  });
+  // 记录一次阅读
+  if(window.__counter) window.__counter.bump('read-' + slug);
+})();
+</script>
+</body>
+</html>

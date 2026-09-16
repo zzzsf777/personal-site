@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我是怎么把 AI 塞进日常工作的 · 小峰</title>
+<meta name="description" content="从一堆手写检测记录到自动生成的报告文档——我试过 OCR、视觉模型、脚本，最后发现真正管用的不是「最强模型」，而是「把重复的部分切出来」。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2300d4ff'/><stop offset='1' stop-color='%237b5cff'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='73' font-size='64' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%230a0e1a'>F</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/"><span class="mark">F</span><span>小峰 · 笔记</span></a>
+  <nav>
+    <a href="/">主页</a>
+    <a href="/blog/">全部笔记</a>
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+  </nav>
+</div></header>
+<main><div class="wrap">
+  <div class="meta"><span>2026-09-12</span><span class="tag">AI 应用</span><span class="tag">自动化</span><span class="tag">工程实践</span></div>
+  <h1>我是怎么把 AI 塞进日常工作的</h1>
+  <div class="stats">
+    <span>👁 阅读 <b data-count-key="read-ai-in-daily-work">—</b></span>
+    <span>↗ 分享 <b data-count-key="share-ai-in-daily-work">—</b></span>
+  </div>
+
+<p>我的本职工作是环境检测与校准，每天和检测数据、证书文书打交道。这行的特点是：<strong>数字必须准</strong>，一个数错了整份报告就得重来。</p>
+<p>最早让我动「能不能让机器干」念头的，是报告里的重复劳动——同样的模板、同样的字段、同样的水印和盖章，只是数据不同。人做久了会麻木，而麻木就会出错。</p>
+<h2>第一次尝试：直接上 OCR</h2>
+<p>我先把现场手写的检测记录拍照，丢给 OCR。结果不理想：手写数字识别率一般，而且 OCR 只给我一堆文字，<strong>还得我手工对位</strong>——省掉的时间又还回去了。</p>
+<h2>转折点：把「识别」和「判断」分开</h2>
+<p>后来我想明白一件事：AI 擅长的不是「全流程替我做」，而是<strong>替我做完其中一段</strong>。于是我把它拆成三步：</p>
+<ul>
+<li><strong>读</strong>：用视觉模型把照片转成结构化数据（这一步 AI 很强）</li>
+<li><strong>核</strong>：用数学关系自检（比如气液比 = 回收体积 ÷ 加油体积），对不上的地方标红给我看（这一步必须由规则和人来做）</li>
+<li><strong>出</strong>：脚本按模板生成文档、批量处理水印和印章（这一步机器又快又稳）</li>
+</ul>
+<p>拆完之后效率提升非常明显，而且<strong>错误率反而下降了</strong>——因为机器不疲劳，而我只集中精力看它标红的那几处。</p>
+<h2>几条真实教训</h2>
+<ul>
+<li><strong>别追求全自动</strong>。人机配合往往比全自动更可靠，尤其在涉及责任的地方。</li>
+<li><strong>给 AI 的输出加一道自检</strong>。数学关系、单位换算、历史数据比对，都是免费的校对器。</li>
+<li><strong>选模型看场景，不看排行榜</strong>。中文截图识别，国内直连的模型往往比「最强模型」更好用；响应速度比能力上限更影响体验。</li>
+</ul>
+<p>现在我的工作流是：<em>我负责判断，机器负责重复</em>。这套分工比什么都自动更让我安心。</p>
+
+  <div class="share-row">
+    <span>分享这篇 →</span>
+    <button class="btn" data-share="copy">🔗 复制链接</button>
+    <button class="btn ghost" data-share="weibo">微博</button>
+    <button class="btn ghost" data-share="qq">QQ</button>
+    <a class="btn ghost" href="/blog/">← 全部笔记</a>
+  </div>
+</div></main>
+<footer><div class="wrap">© <span id="yr"></span> 小峰 · <a href="/">zzzsf777.pages.dev</a></div></footer>
+<script>(function(){
+  var s = localStorage.getItem('site-theme');
+  if(s === 'light') document.body.classList.add('light');
+  var b = document.getElementById('themeToggle');
+  if(b){
+    b.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
+    b.addEventListener('click', function(){
+      var l = document.body.classList.toggle('light');
+      b.textContent = l ? '☀️' : '🌙';
+      localStorage.setItem('site-theme', l ? 'light' : 'dark');
+    });
+  }
+})();
+document.getElementById('yr').textContent = new Date().getFullYear();</script>
+<script>(function(){
+  var NS = 'zzzsf777';
+  function bump(key, cb){
+    fetch('https://abacus.jasoncameron.dev/hit/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  function read(key, cb){
+    fetch('https://abacus.jasoncameron.dev/get/' + NS + '/' + key)
+      .then(function(r){ return r.json(); })
+      .then(function(d){ if(cb) cb(d.value); })
+      .catch(function(){ if(cb) cb(null); });
+  }
+  window.__counter = {bump:bump, read:read};
+  // 自动填充 [data-count-key] 元素的只读数字
+  document.querySelectorAll('[data-count-key]').forEach(function(el){
+    read(el.dataset.countKey, function(v){ el.textContent = (v === null ? '—' : v); });
+  });
+})();</script>
+<script>
+(function(){
+  var slug = 'ai-in-daily-work';
+  var url = location.href;
+  document.querySelectorAll('[data-share]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.dataset.share;
+      if(window.__counter) window.__counter.bump('share-' + slug);
+      if(k === 'copy'){
+        navigator.clipboard.writeText(url).then(function(){
+          var t = b.textContent; b.textContent = '✓ 已复制';
+          setTimeout(function(){ b.textContent = t; }, 1600);
+        }).catch(function(){ prompt('复制链接：', url); });
+      } else if(k === 'weibo'){
+        open('https://service.weibo.com/share/share.php?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      } else if(k === 'qq'){
+        open('https://connect.qq.com/widget/shareqq/index.html?url=' + encodeURIComponent(url) + '&title=' + encodeURIComponent(document.title), '_blank');
+      }
+    });
+  });
+  // 记录一次阅读
+  if(window.__counter) window.__counter.bump('read-' + slug);
+})();
+</script>
+</body>
+</html>

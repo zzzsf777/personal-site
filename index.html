@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- ============================================================
+     修改第 1 处：浏览器标签标题 + 搜索描述
+     ============================================================ -->
+<title>小峰 · 个人主页</title>
+<meta name="description" content="环境检测工程师 · AI 工具实践者 · 内容创作者">
+
+<style>
+/* ============================================================
+   配色：改这里可以一键换主题色
+   ============================================================ */
+:root{
+  --bg:#060910;
+  --bg-soft:#0b1120;
+  --card:rgba(255,255,255,.035);
+  --card-brd:rgba(120,180,255,.14);
+  --txt:#e8eefc;
+  --txt-dim:#8ea3c4;
+  --c1:#00d4ff;      /* 主色：青蓝 */
+  --c2:#7b5cff;      /* 副色：紫 */
+  --c3:#00ffa3;      /* 点缀：荧光绿 */
+  --glow:0 0 24px rgba(0,212,255,.35);
+  --radius:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  line-height:1.75;overflow-x:hidden;position:relative;
+}
+canvas#bg{position:fixed;inset:0;z-index:0;opacity:.75}
+.grid-overlay{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(0,212,255,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,212,255,.045) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 40%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 40%,transparent 100%);
+}
+.cursor-glow{
+  position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(0,212,255,.10),transparent 62%);
+  transform:translate(-50%,-50%);transition:opacity .4s;
+}
+/* 顶部滚动进度条 */
+.progress{position:fixed;top:0;left:0;height:2px;z-index:99;
+  background:linear-gradient(90deg,var(--c1),var(--c2));width:0;
+  box-shadow:0 0 12px rgba(0,212,255,.7)}
+/* 导航 */
+header{position:fixed;top:0;left:0;right:0;z-index:50;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(6,9,16,.62);border-bottom:1px solid rgba(120,180,255,.10)}
+nav{max-width:1120px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
+.logo .mark{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--c1),var(--c2));color:#04070d;font-weight:900;font-size:15px;
+  box-shadow:var(--glow)}
+.nav-links{display:flex;gap:6px}
+.nav-links a{color:var(--txt-dim);text-decoration:none;font-size:14.5px;padding:8px 14px;border-radius:9px;
+  transition:.25s;position:relative}
+.nav-links a:hover,.nav-links a.active{color:var(--txt);background:rgba(0,212,255,.09)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px;position:relative;z-index:2}
+section{padding:112px 0;position:relative}
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:80px}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--c1);
+  border:1px solid rgba(0,212,255,.30);background:rgba(0,212,255,.07);
+  padding:6px 14px;border-radius:999px;margin-bottom:26px;letter-spacing:.4px}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--c3);
+  box-shadow:0 0 10px var(--c3);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1{font-size:clamp(42px,7vw,74px);line-height:1.08;font-weight:800;letter-spacing:-1.5px}
+h1 .grad{background:linear-gradient(120deg,var(--c1),var(--c2) 55%,var(--c3));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.typed-line{margin-top:20px;font-size:clamp(16px,2.4vw,21px);color:var(--txt-dim);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:34px}
+.typed-line .prompt{color:var(--c1)}
+.caret{display:inline-block;width:9px;height:1.15em;background:var(--c3);vertical-align:-3px;
+  margin-left:3px;animation:blink 1s steps(1) infinite;box-shadow:0 0 10px var(--c3)}
+@keyframes blink{50%{opacity:0}}
+.hero p.lead{margin-top:26px;max-width:620px;color:var(--txt-dim);font-size:16.5px}
+.cta{margin-top:38px;display:flex;gap:14px;flex-wrap:wrap}
+.btn{padding:13px 26px;border-radius:11px;text-decoration:none;font-size:15px;font-weight:600;
+  transition:.28s;display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:none;font-family:inherit}
+.btn-primary{background:linear-gradient(135deg,var(--c1),var(--c2));color:#04070d;box-shadow:var(--glow)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 34px rgba(0,212,255,.55)}
+.btn-ghost{background:transparent;color:var(--txt);border:1px solid var(--card-brd)}
+.btn-ghost:hover{border-color:var(--c1);color:var(--c1);transform:translateY(-3px)}
+/* 通用标题 */
+.sec-head{margin-bottom:54px}
+.sec-tag{font-size:13px;letter-spacing:2.5px;color:var(--c1);text-transform:uppercase;font-weight:700;
+  font-family:ui-monospace,monospace}
+h2{font-size:clamp(28px,4.2vw,40px);font-weight:800;margin-top:12px;letter-spacing:-.8px}
+.sec-head p{color:var(--txt-dim);margin-top:14px;max-width:600px}
+/* 卡片通用 */
+.card{background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);
+  padding:30px;transition:.35s;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;opacity:0;transition:.35s;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(0,212,255,.11),transparent 62%)}
+.card:hover::before{opacity:1}
+.card:hover{border-color:rgba(0,212,255,.42);transform:translateY(-5px)}
+/* 关于 */
+.about-grid{display:grid;grid-template-columns:1.35fr .95fr;gap:30px;align-items:start}
+.about-text p{color:var(--txt-dim);margin-bottom:18px}
+.about-text strong{color:var(--txt);font-weight:600}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{background:var(--card);border:1px solid var(--card-brd);border-radius:13px;padding:20px;text-align:center}
+.stat .num{font-size:29px;font-weight:800;
+  background:linear-gradient(120deg,var(--c1),var(--c3));-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+.stat .lab{font-size:12.5px;color:var(--txt-dim);margin-top:5px;letter-spacing:.4px}
+/* 技能网格 */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:20px}
+.skill .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:18px;
+  background:linear-gradient(135deg,rgba(0,212,255,.16),rgba(123,92,255,.16));
+  border:1px solid rgba(0,212,255,.22);font-size:21px}
+.skill h3{font-size:17.5px;margin-bottom:9px;font-weight:700}
+.skill p{color:var(--txt-dim);font-size:14.5px}
+.tags{margin-top:16px;display:flex;gap:7px;flex-wrap:wrap}
+.tag{font-size:12px;color:var(--c1);background:rgba(0,212,255,.09);border:1px solid rgba(0,212,255,.20);
+  padding:3px 10px;border-radius:999px;font-family:ui-monospace,monospace}
+/* 项目 */
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.proj .head{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:14px}
+.proj h3{font-size:18.5px;font-weight:700}
+.proj .status{font-size:11.5px;color:var(--c3);border:1px solid rgba(0,255,163,.28);
+  background:rgba(0,255,163,.08);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.proj p{color:var(--txt-dim);font-size:14.5px}
+.proj .stack{margin-top:18px;padding-top:16px;border-top:1px solid rgba(120,180,255,.11);
+  font-size:12.5px;color:var(--txt-dim);font-family:ui-monospace,monospace}
+/* 联系 */
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:34px}
+.contact-item{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
+.contact-item .ci{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:19px;
+  background:rgba(0,212,255,.10);border:1px solid rgba(0,212,255,.20)}
+.contact-item .cl{font-size:12.5px;color:var(--txt-dim)}
+.contact-item .cv{font-size:15px;font-weight:600}
+/* 页脚 */
+footer{border-top:1px solid rgba(120,180,255,.10);padding:44px 0;text-align:center;
+  color:var(--txt-dim);font-size:13.5px;position:relative;z-index:2}
+footer .mono{font-family:ui-monospace,monospace;color:var(--c1)}
+/* 滚动出现 */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+/* 响应式 */
+@media(max-width:860px){
+  .about-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  section{padding:82px 0}
+  .cursor-glow{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="grid-overlay"></div>
+<div class="cursor-glow" id="glow"></div>
+<div class="progress" id="prog"></div>
+
+<!-- ============================================================
+     导航：改文字 = 改下面的标签名
+     ============================================================ -->
+<header>
+  <nav>
+    <div class="logo"><span class="mark">峰</span><span>小峰</span></div>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#skills">能力</a>
+      <a href="#projects">项目</a>
+      <a href="#contact">联系</a>
+    </div>
+  </nav>
+</header>
+
+<!-- ============================================================
+     Hero 首屏
+     ============================================================ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="badge"><span class="dot"></span>Open to opportunities · 欢迎交流</div>
+    <h1>你好，我是<br><span class="grad">小峰</span></h1>
+
+    <!-- 打字机：改下面的数组 = 改轮播的文字 -->
+    <div class="typed-line"><span class="prompt">$</span> <span id="typed"></span><span class="caret"></span></div>
+
+    <p class="lead">
+      做环境检测与校准证书，也折腾 AI 工具和自动化脚本。<br>
+      相信工程化的方法能把重复劳动变成可靠流程 —— 把想法变成能跑起来的东西。
+    </p>
+
+    <div class="cta">
+      <!-- 改 href = 改按钮跳转；email 按钮建议改成 mailto:你的邮箱 -->
+      <a class="btn btn-primary" href="#projects">看看我的项目 →</a>
+      <a class="btn btn-ghost" href="#contact">联系我</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     关于
+     ============================================================ -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// About</div>
+      <h2>关于我</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text card reveal">
+        <p>我在 <strong>福建闽科测试技术研究院</strong> 从事环境检测与校准工作，日常是和检测数据、证书文书、仪器参数打交道 —— 这份工作要求<strong>严谨</strong>，一个数字错了整份报告就得重来。</p>
+        <p>业余时间我是个 <strong>AI 工具重度玩家</strong>：折腾本地模型、写自动化脚本、把重复的文档处理流程做成可复用的工具。我喜欢研究「一件事能不能交给机器做」，也乐于把流程沉淀成技能包，让下次做同样的事只需要一句话。</p>
+        <p>另外也在做<strong>软件工具测评内容</strong>（短视频方向），记录那些真正干净、好用的工具 —— 不吹不黑，只讲实测。</p>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><div class="num" data-count="300">0</div><div class="lab">检测报告处理</div></div>
+        <div class="stat"><div class="num" data-count="20">0</div><div class="lab">自动化工具</div></div>
+        <div class="stat"><div class="num" data-count="3">0</div><div class="lab">沉淀技能包</div></div>
+        <div class="stat"><div class="num" data-count="100">0</div><div class="lab">% 实测主义</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     能力 / 技能
+     ============================================================ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Capabilities</div>
+      <h2>我能做什么</h2>
+      <p>左半是本职专业，右半是这些年点出来的技能树。</p>
+    </div>
+    <div class="skills">
+      <div class="card skill reveal">
+        <div class="ico">🧪</div>
+        <h3>环境检测与校准</h3>
+        <p>加油站油气回收检测、在线监测、各类仪器的校准证书制作与审核流程。</p>
+        <div class="tags"><span class="tag">GB 20952</span><span class="tag">校准证书</span><span class="tag">CMA</span></div>
+      </div>
+      <div class="card skill reveal">
+        <div class="ico">🤖</div>
+        <h3>AI 工具应用</h3>
+        <p>把大模型接进日常工作流：文档处理、图像识别、内容生成、自动化代理。</p>
+        <div class="tags"><span class="tag">LLM</span><span class="tag">Agent</span><span class="tag">Vision</span></div>
+      </div>
+      <div class="card skill reveal">
+        <div class="ico">⚙️</div>
+        <h3>自动化脚本</h3>
+        <p>用 Python 把重复劳动变成一键操作，包括网页监控、批量文档处理、定时任务。</p>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Playwright</span><span class="tag">Windows</span></div>
+      </div>
+      <div class="card skill reveal">
+        <div class="ico">📄</div>
+        <h3>文档工程</h3>
+        <p>批量 PDF 处理、水印与电子章、格式转换与报告生成的标准流程建设。</p>
+        <div class="tags"><span class="tag">PDF</span><span class="tag">Word</span><span class="tag">批量处理</span></div>
+      </div>
+      <div class="card skill reveal">
+        <div class="ico">🎬</div>
+        <h3>内容创作</h3>
+        <p>软件测评方向的内容策划与制作，从选题、脚本到封面的一套流程。</p>
+        <div class="tags"><span class="tag">选题</span><span class="tag">脚本</span><span class="tag">测评</span></div>
+      </div>
+      <div class="card skill reveal">
+        <div class="ico">🔍</div>
+        <h3>实测主义</h3>
+        <p>不迷信宣传参数：工具好不好，跑一组 A/B 数据出来说话。</p>
+        <div class="tags"><span class="tag">Benchmark</span><span class="tag">A/B 对比</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     项目
+     ============================================================ -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Projects</div>
+      <h2>做过的东西</h2>
+    </div>
+    <div class="projects">
+      <div class="card proj reveal">
+        <div class="head"><h3>检测报告自动化流水线</h3><span class="status">持续维护</span></div>
+        <p>把「手写记录 → 识别 → 生成证书 → 盖章」的整条链路做成标准流程，配合浏览器自动化完成数据录入，单人日处理量提升数倍。</p>
+        <div class="stack">Python · Vision · PDF · 电子章</div>
+      </div>
+      <div class="card proj reveal">
+        <div class="head"><h3>内容生产系统</h3><span class="status">使用中</span></div>
+        <p>面向软件测评创作者的本地工具站：选题库、脚本生成、标题与封面文案、字幕清洗、发布记录一体化，纯前端离线可用。</p>
+        <div class="stack">Vanilla JS · LocalStorage · 单页应用</div>
+      </div>
+      <div class="card proj reveal">
+        <div class="head"><h3>抢购监控助手</h3><span class="status">运行中</span></div>
+        <p>多目标页面监控工具：状态变化即刻响铃 + 置顶弹窗 + 自动打开购买页；带防误报时间窗与浏览器崩溃自愈机制。</p>
+        <div class="stack">Python · Playwright · 常驻守护</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     联系：改这里的文字与链接
+     ============================================================ -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-tag">// Contact</div>
+      <h2>聊聊？</h2>
+      <p>对检测行业自动化、AI 工具落地、或者干净的软件感兴趣，都欢迎来找我。</p>
+    </div>
+    <div class="contact-grid">
+      <a class="card contact-item reveal" href="#">
+        <div class="ci">✉️</div>
+        <div><div class="cl">Email</div><div class="cv">your@email.com</div></div>
+      </a>
+      <a class="card contact-item reveal" href="#">
+        <div class="ci">💬</div>
+        <div><div class="cl">微信</div><div class="cv">your_wechat_id</div></div>
+      </a>
+      <a class="card contact-item reveal" href="#">
+        <div class="ci">🐙</div>
+        <div><div class="cl">GitHub</div><div class="cv">github.com/yourname</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    © <span id="yr"></span> 小峰 · Built with <span class="mono">HTML / CSS / JS</span> · 零依赖单文件
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   粒子背景（科技感的核心）
+   ============================================================ */
+(function(){
+  const c = document.getElementById('bg'), x = c.getContext('2d');
+  let w, h, pts = [], mouse = {x:-9999, y:-9999};
+  const COUNT = window.innerWidth < 768 ? 34 : 66;
+
+  function resize(){ w = c.width = innerWidth; h = c.height = innerHeight; }
+  function init(){
+    pts = Array.from({length:COUNT}, () => ({
+      x:Math.random()*w, y:Math.random()*h,
+      vx:(Math.random()-.5)*.42, vy:(Math.random()-.5)*.42,
+      r:Math.random()*1.7+.6
+    }));
+  }
+  function draw(){
+    x.clearRect(0,0,w,h);
+    // 连线
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.hypot(dx,dy);
+        if(d<148){
+          x.strokeStyle=`rgba(0,212,255,${(1-d/148)*.20})`;
+          x.lineWidth=.9;
+          x.beginPath(); x.moveTo(pts[i].x,pts[i].y); x.lineTo(pts[j].x,pts[j].y); x.stroke();
+        }
+      }
+    }
+    // 粒子 + 鼠标吸引
+    pts.forEach(p=>{
+      const dm=Math.hypot(p.x-mouse.x, p.y-mouse.y);
+      if(dm<170){
+        p.x += (mouse.x-p.x)*.0018; p.y += (mouse.y-p.y)*.0018;
+        x.strokeStyle=`rgba(0,255,163,${(1-dm/170)*.30})`; x.lineWidth=.8;
+        x.beginPath(); x.moveTo(p.x,p.y); x.lineTo(mouse.x,mouse.y); x.stroke();
+      }
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>w) p.vx*=-1;
+      if(p.y<0||p.y>h) p.vy*=-1;
+      x.beginPath(); x.arc(p.x,p.y,p.r,0,7);
+      x.fillStyle='rgba(0,212,255,.62)';
+      x.shadowColor='rgba(0,212,255,.85)'; x.shadowBlur=9;
+      x.fill(); x.shadowBlur=0;
+    });
+    requestAnimationFrame(draw);
+  }
+  addEventListener('resize', ()=>{ resize(); init(); });
+  addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+  addEventListener('mouseleave', ()=>{ mouse.x=mouse.y=-9999; });
+  resize(); init(); draw();
+})();
+
+/* 鼠标跟随光晕 */
+(function(){
+  const g = document.getElementById('glow');
+  let tx=0, ty=0, cx=0, cy=0;
+  addEventListener('mousemove', e=>{ tx=e.clientX; ty=e.clientY; });
+  (function loop(){
+    cx += (tx-cx)*.12; cy += (ty-cy)*.12;
+    g.style.left = cx+'px'; g.style.top = cy+'px';
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* 打字机：改这个数组 = 改轮播文字 */
+(function(){
+  const words = [
+    '环境检测与校准证书',
+    'AI 工具自动化实践',
+    '把重复劳动交给脚本',
+    '实测主义 · 数据说话'
+  ];
+  const el = document.getElementById('typed');
+  let wi=0, ci=0, del=false;
+  (function tick(){
+    const word = words[wi];
+    el.textContent = del ? word.slice(0, --ci) : word.slice(0, ++ci);
+    let d = del ? 42 : 92;
+    if(!del && ci === word.length){ d = 1500; del = true; }
+    else if(del && ci === 0){ del = false; wi = (wi+1)%words.length; d = 380; }
+    setTimeout(tick, d);
+  })();
+})();
+
+/* 滚动出现动画 */
+(function(){
+  const io = new IntersectionObserver((es)=>{
+    es.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('in'), i*70);
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:.12, rootMargin:'0px 0px -40px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+/* 数字滚动 */
+(function(){
+  const io = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el = e.target, target = +el.dataset.count;
+      let cur = 0, step = Math.max(1, Math.round(target/44));
+      const t = setInterval(()=>{
+        cur += step;
+        if(cur >= target){ cur = target; clearInterval(t); }
+        el.textContent = cur;
+      }, 26);
+      io.unobserve(el);
+    });
+  }, {threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+})();
+
+/* 滚动进度条 + 导航高亮 */
+(function(){
+  const prog = document.getElementById('prog');
+  const links = [...document.querySelectorAll('.nav-links a')];
+  const secs = links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function onScroll(){
+    const st = scrollY, dh = document.documentElement.scrollHeight - innerHeight;
+    prog.style.width = (dh>0 ? (st/dh)*100 : 0) + '%';
+    let cur = secs[0];
+    secs.forEach(s=>{ if(s.offsetTop - 140 <= st) cur = s; });
+    links.forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+cur.id));
+  }
+  addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+
+/* 卡片光斑跟随鼠标 */
+document.querySelectorAll('.card').forEach(c=>{
+  c.addEventListener('mousemove', e=>{
+    const r = c.getBoundingClientRect();
+    c.style.setProperty('--mx', (e.clientX-r.left)+'px');
+    c.style.setProperty('--my', (e.clientY-r.top)+'px');
+  });
+});
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

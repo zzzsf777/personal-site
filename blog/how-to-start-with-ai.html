@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>我是怎么把 AI 塞进日常工作的 · 小峰</title>
-<meta name="description" content="从一堆手写检测记录到自动生成的报告文档——我试过 OCR、视觉模型、脚本，最后发现真正管用的不是「最强模型」，而是「把重复的部分切出来」。">
+<title>普通人第一次用 AI，该从哪开始？ · 小峰</title>
+<meta name="description" content="经常有人问：AI 到底怎么用、该从哪开始？我不是技术出身，就从自己摸索的顺序说起——先别纠结哪个模型最强，把它当成「能快速给草稿的助手」就行。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%2300d4ff'/><stop offset='1' stop-color='%237b5cff'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><text x='50' y='73' font-size='64' font-family='Arial,sans-serif' font-weight='bold' text-anchor='middle' fill='%230a0e1a'>F</text></svg>">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -17,33 +17,49 @@
     <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
   </nav>
 </div></header>
-<main><div class="wrap">
-  <div class="meta"><span>2026-09-12</span><span class="tag">AI 应用</span><span class="tag">自动化</span><span class="tag">工程实践</span></div>
-  <h1>我是怎么把 AI 塞进日常工作的</h1>
+<main>
+<div class="wrap">  <div class="meta"><span>2026-09-12</span><span class="tag">AI 入门</span><span class="tag">实用经验</span></div>
+  <h1>普通人第一次用 AI，该从哪开始？</h1>
   <div class="stats">
-    <span>👁 阅读 <b data-count-key="read-ai-in-daily-work">—</b></span>
-    <span>↗ 分享 <b data-count-key="share-ai-in-daily-work">—</b></span>
+    <span>👁 阅读 <b data-count-key="read-how-to-start-with-ai">—</b></span>
+    <span>↗ 分享 <b data-count-key="share-how-to-start-with-ai">—</b></span>
   </div>
 
-<p>我的本职工作是环境检测与校准，每天和检测数据、证书文书打交道。这行的特点是：<strong>数字必须准</strong>，一个数错了整份报告就得重来。</p>
-<p>最早让我动「能不能让机器干」念头的，是报告里的重复劳动——同样的模板、同样的字段、同样的水印和盖章，只是数据不同。人做久了会麻木，而麻木就会出错。</p>
-<h2>第一次尝试：直接上 OCR</h2>
-<p>我先把现场手写的检测记录拍照，丢给 OCR。结果不理想：手写数字识别率一般，而且 OCR 只给我一堆文字，<strong>还得我手工对位</strong>——省掉的时间又还回去了。</p>
-<h2>转折点：把「识别」和「判断」分开</h2>
-<p>后来我想明白一件事：AI 擅长的不是「全流程替我做」，而是<strong>替我做完其中一段</strong>。于是我把它拆成三步：</p>
+<p>经常有人问我："AI 到底怎么用？我该从哪开始？"</p>
+<p>先把话说在前面：<strong>我不是技术出身</strong>，也不是什么 AI 专家。我就是个爱折腾的普通人，从"想试试看"开始，慢慢摸出一些真能用上的路子。下面是我自己走过的顺序。</p>
+
+<h2>第一步：先有一个能用的工具</h2>
+<p>别一上来就纠结"哪个模型最强"。对普通人来说，能不能<strong>稳定打开、免费或用得起、中文好用</strong>，比排行榜重要得多。</p>
 <ul>
-<li><strong>读</strong>：用视觉模型把照片转成结构化数据（这一步 AI 很强）</li>
-<li><strong>核</strong>：用数学关系自检（比如气液比 = 回收体积 ÷ 加油体积），对不上的地方标红给我看（这一步必须由规则和人来做）</li>
-<li><strong>出</strong>：脚本按模板生成文档、批量处理水印和印章（这一步机器又快又稳）</li>
+<li>手机上的对话类 App 就够入门（豆包、DeepSeek 这些都可以）</li>
+<li>先不急着付费，用免费额度把感觉找到</li>
+<li>电脑上先试网页版，比装软件更快</li>
 </ul>
-<p>拆完之后效率提升非常明显，而且<strong>错误率反而下降了</strong>——因为机器不疲劳，而我只集中精力看它标红的那几处。</p>
-<h2>几条真实教训</h2>
+
+<h2>第二步：从"帮我想"开始</h2>
+<p>最容易用起来的就三件事：</p>
 <ul>
-<li><strong>别追求全自动</strong>。人机配合往往比全自动更可靠，尤其在涉及责任的地方。</li>
-<li><strong>给 AI 的输出加一道自检</strong>。数学关系、单位换算、历史数据比对，都是免费的校对器。</li>
-<li><strong>选模型看场景，不看排行榜</strong>。中文截图识别，国内直连的模型往往比「最强模型」更好用；响应速度比能力上限更影响体验。</li>
+<li><strong>写东西</strong>：起草一段文字、改得更顺口、换个说法</li>
+<li><strong>总结</strong>：把一篇长文章丢进去，让它几句话讲清楚</li>
+<li><strong>翻译润色</strong>：比机翻自然很多</li>
 </ul>
-<p>现在我的工作流是：<em>我负责判断，机器负责重复</em>。这套分工比什么都自动更让我安心。</p>
+<p>关键在<strong>怎么提问</strong>：说清楚你的身份、目的、想要的形式。比如"我是做销售的，帮我把这段话改成给客户看的正式版本，100 字以内"——比"帮我改一下"有用十倍。</p>
+
+<h2>第三步：再试"帮我看"</h2>
+<p>截图识别是很多人忽略的功能。看到一篇文章、一张表格、一段说明书，截图直接问它，能省掉大量打字时间。</p>
+
+<h2>第四步：要不要在自己电脑上跑？</h2>
+<p>简单说：<strong>先不用</strong>。本地跑模型对电脑配置有要求，更适合有特定需求（比如资料不能外传）的人。等你日常用顺了，再考虑也不迟。</p>
+
+<h2>几条我踩出来的经验</h2>
+<ul>
+<li><strong>别指望一次给你完美答案</strong>，把它当"能快速给草稿的助手"</li>
+<li><strong>重要的事一定自己核对</strong>，尤其是数字、日期、条款</li>
+<li><strong>一次只提一个要求</strong>，一堆要求堆上去它反而做不好</li>
+<li><strong>先解决一个具体小问题</strong>，比看十篇教程都有用</li>
+</ul>
+
+<p>说到底，AI 现在最大的价值不是"替你思考"，而是<strong>帮你把重复、耗时的部分先做掉</strong>，让你把精力留给判断和决定。今天找个小事试试，比收藏一堆攻略管用得多。</p>
 
   <div class="share-row">
     <span>分享这篇 →</span>
@@ -52,7 +68,7 @@
     <button class="btn ghost" data-share="qq">QQ</button>
     <a class="btn ghost" href="/blog/">← 全部笔记</a>
   </div>
-</div></main>
+</main>
 <footer><div class="wrap">© <span id="yr"></span> 小峰 · <a href="/">zzzsf777.pages.dev</a></div></footer>
 <script>(function(){
   var s = localStorage.getItem('site-theme');
@@ -90,7 +106,7 @@ document.getElementById('yr').textContent = new Date().getFullYear();</script>
 })();</script>
 <script>
 (function(){
-  var slug = 'ai-in-daily-work';
+  var slug = 'how-to-start-with-ai';
   var url = location.href;
   document.querySelectorAll('[data-share]').forEach(function(b){
     b.addEventListener('click', function(){
